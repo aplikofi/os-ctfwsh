@@ -10,9 +10,6 @@
   <div class="challenge-detail" style="max-width:420px;">
     <form method="POST" action="{{ url_for('login') }}">
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-      {% if next %}
-        <input type="hidden" name="next" value="{{ next }}">
-      {% endif %}
 
       <label for="email" style="display:block; margin-bottom:6px; color:var(--text-dim); font-size:0.85rem;">Email Address</label>
       <input type="email" id="email" name="email" class="flag-input" style="width:100%; margin-bottom:16px;"

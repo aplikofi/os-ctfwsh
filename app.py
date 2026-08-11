@@ -217,23 +217,23 @@ def login():
 
         email = (request.form.get("email") or "").strip().lower()
         password = request.form.get("password") or ""
-        next_url = request.values.get("next")
 
         db = get_db()
         team = db.execute("SELECT * FROM teams WHERE email = ?", (email,)).fetchone()
 
         if team is None or not check_password_hash(team["password_hash"], password):
             flash("Invalid email or password.", "error")
-            return render_template("login.html", email=email, next=next_url), 401
+            return render_template("login.html", email=email), 401
 
         session.clear()
         session.permanent = True
         session["team_id"] = team["id"]
         session["team_name"] = team["team_name"]
 
+        next_url = request.args.get("next")
         return redirect(next_url or url_for("dashboard"))
 
-    return render_template("login.html", next=request.values.get("next"))
+    return render_template("login.html")
 
 
 @app.route("/logout")
@@ -472,6 +472,20 @@ def api_time_remaining():
 # (kept outside /static/ so they require authentication and aren't
 #  directly guessable/scrapeable by anyone who isn't logged in)
 # =====================================================================
+
+@app.route("/secret/")
+@login_required
+def hidden_directory():
+    """Simulate a directory listing for /secret/ so the robots.txt clue
+    leads somewhere useful instead of a 404."""
+    listing_html = (
+        '<!DOCTYPE html><html><head><title>Index of /secret/</title></head>'
+        '<body><h1>Index of /secret/</h1><hr>'
+        '<pre><a href="/secret/flag.txt">flag.txt</a></pre>'
+        '<hr></body></html>'
+    )
+    return listing_html
+
 
 @app.route("/secret/flag.txt")
 @login_required
