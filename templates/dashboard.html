@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — CyberQuest CTF{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="page-header">
+    <h1>&gt; CyberQuest CTF</h1>
+    <p>Welcome back, {{ team.team_name }}.</p>
+  </div>
+
+  <div class="stats-row" style="max-width:720px;">
+    <div class="stat-card">
+      <div class="value">{{ team.team_name }}</div>
+      <div class="label">Team Name</div>
+    </div>
+    <div class="stat-card">
+      <div class="value">{{ team.score }}</div>
+      <div class="label">Current Score</div>
+    </div>
+    <div class="stat-card">
+      <div class="value">{{ solved_count }}</div>
+      <div class="label">Solved</div>
+    </div>
+    <div class="stat-card">
+      <div class="value">{{ total_challenges }}</div>
+      <div class="label">Total Challenges</div>
+    </div>
+  </div>
+
+  <div class="countdown" style="margin-top:40px;">
+    <div class="label">{{ 'CTF ENDED' if event.ended else 'Event Ends In' }}</div>
+    <div class="countdown-timer" id="countdown">--:--:--</div>
+  </div>
+
+  <div class="hero-buttons" style="margin-top:40px;">
+    <a href="{{ url_for('challenges_list') }}" class="btn btn-primary">Challenges</a>
+    <a href="{{ url_for('scoreboard') }}" class="btn btn-secondary">Scoreboard</a>
+    <a href="{{ url_for('rules') }}" class="btn btn-secondary">Rules</a>
+    <a href="{{ url_for('logout') }}" class="btn btn-secondary">Logout</a>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  window.CTF_EVENT_REMAINING = {{ event.remaining_seconds }};
+  window.CTF_EVENT_ENDED = {{ 'true' if event.ended else 'false' }};
+  document.addEventListener("DOMContentLoaded", () => CTFApp.startCountdown("countdown"));
+</script>
+{% endblock %}

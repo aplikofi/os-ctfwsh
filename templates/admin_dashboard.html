@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard — CyberQuest CTF{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="page-header">
+    <h1>&gt; Admin Dashboard</h1>
+    <p>Logged in as {{ session.get('admin_username') }} — <a href="{{ url_for('admin_logout') }}">Logout</a></p>
+  </div>
+
+  <div class="stats-row" style="max-width:900px;">
+    <div class="stat-card">
+      <div class="value">{{ total_teams }}</div>
+      <div class="label">Registered Teams</div>
+    </div>
+    <div class="stat-card">
+      <div class="value">{{ total_submissions }}</div>
+      <div class="label">Total Submissions</div>
+    </div>
+    <div class="stat-card">
+      <div class="value">{{ total_correct }}</div>
+      <div class="label">Correct Submissions</div>
+    </div>
+    <div class="stat-card">
+      <div class="value">{{ max_score }}</div>
+      <div class="label">Max Possible Score</div>
+    </div>
+  </div>
+
+  <div class="challenge-detail" style="max-width:900px; margin-top:40px;">
+    <h3 style="color:var(--accent-cyan); margin-bottom:14px;">Event Control</h3>
+    <p style="color:var(--text-dim); font-size:0.9rem; margin-bottom:6px;">
+      Status: <strong style="color:{{ 'var(--accent-red)' if event.ended else 'var(--accent-green)' }}">
+        {{ 'ENDED' if event.ended else 'ACTIVE' }}
+      </strong>
+      &nbsp;·&nbsp; Duration: {{ event_settings.duration_minutes }} minutes
+      &nbsp;·&nbsp; Started: {{ event_settings.event_start }}
+    </p>
+
+    <div style="display:flex; gap:14px; flex-wrap:wrap; margin-top:16px;">
+      <form method="POST" action="{{ url_for('admin_end_event') }}" onsubmit="return confirm('End the event now? Submissions will be closed immediately.');">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button type="submit" class="btn-sm">End Event Now</button>
+      </form>
+
+      <form method="POST" action="{{ url_for('admin_reset_event') }}" onsubmit="return confirm('This wipes ALL team scores and progress and restarts the timer. Are you sure?');" style="display:flex; gap:8px; align-items:center;">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="number" name="duration_minutes" class="flag-input" style="width:130px; padding:8px 10px;" placeholder="Minutes" value="{{ event_settings.duration_minutes }}">
+        <button type="submit" class="btn-sm" style="border-color:var(--accent-red); color:var(--accent-red);">Reset Entire Event</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="challenge-detail" style="max-width:1100px; margin-top:30px; overflow-x:auto;">
+    <h3 style="color:var(--accent-cyan); margin-bottom:14px;">Teams</h3>
+    <table class="scoreboard-table">
+      <thead>
+        <tr>
+          <th>Team</th>
+          <th>Email</th>
+          <th>Score</th>
+          <th>Solved</th>
+          <th>Registered</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for t in teams %}
+        <tr>
+          <td>{{ t.team_name }}</td>
+          <td>{{ t.email }}</td>
+          <td>{{ t.score }}</td>
+          <td>{{ solved_counts.get(t.id, 0) }} / {{ total_challenges }}</td>
+          <td style="font-size:0.8rem; color:var(--text-dim);">{{ t.created_at }}</td>
+          <td>
+            <form method="POST" action="{{ url_for('admin_reset_team', team_id=t.id) }}" onsubmit="return confirm('Reset {{ t.team_name }}\'s progress and score?');">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button type="submit" class="btn-sm">Reset</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="challenge-detail" style="max-width:1100px; margin-top:30px; overflow-x:auto;">
+    <h3 style="color:var(--accent-cyan); margin-bottom:14px;">Recent Submission Activity</h3>
+    <table class="scoreboard-table">
+      <thead>
+        <tr>
+          <th>Time</th>
+          <th>Team</th>
+          <th>Challenge</th>
+          <th>Result</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in recent_submissions %}
+        <tr>
+          <td style="font-size:0.8rem; color:var(--text-dim);">{{ s.submitted_at }}</td>
+          <td>{{ s.team_name }}</td>
+          <td>{{ s.title }}</td>
+          <td style="color:{{ 'var(--accent-green)' if s.is_correct else 'var(--accent-red)' }};">
+            {{ 'Correct' if s.is_correct else 'Incorrect' }}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

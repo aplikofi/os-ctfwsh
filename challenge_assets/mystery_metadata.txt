@@ -1,0 +1,8 @@
+mystery.jpg — File Metadata (exported)
+========================================
+ImageDescription : Flag: CTF{metadata_detective}
+Artist           : CyberQuest CTF Organizers
+Copyright        : CyberQuest CTF 2026 - Forensics Challenge
+
+Note: This is a plain-text export of the image's EXIF data, provided as a
+fallback in case a player's device can't easily view image metadata.

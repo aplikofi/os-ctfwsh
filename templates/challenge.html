@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}{{ meta.title }} — CyberQuest CTF{% endblock %}
+
+{% block head_extra %}
+{% if challenge.code == 'find-source' %}
+<!--
+  Hey there, curious player 👀
+  You found the source code — that's exactly the point of this challenge.
+  Here is your flag:
+  CTF{{ '{' }}view_source_master{{ '}' }}
+-->
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="challenge-detail">
+    <div class="meta">
+      <span class="badge badge-{{ meta.category_key }}">{{ meta.category }}</span>
+      <span class="badge badge-easy">{{ meta.difficulty }}</span>
+      <span class="points-tag">{{ meta.points }} pts</span>
+    </div>
+
+    <h1>{{ meta.title }}</h1>
+    <div class="solved-tag" id="solved-tag" style="display:{{ 'inline-flex' if solved else 'none' }};">✔ Solved</div>
+
+    <p class="story">{{ meta.story }}</p>
+
+    {% if challenge.code == 'base64' %}
+    <div class="terminal">
+      <div>{{ meta.encoded_data }}</div>
+    </div>
+    {% endif %}
+
+    {% if challenge.code == 'hidden-file' %}
+    <p style="color:var(--text-dim); font-size:0.9rem;">
+      Tip: check this site's <code>/robots.txt</code> file.
+    </p>
+    {% endif %}
+
+    {% if challenge.code == 'image-mystery' %}
+    <div style="text-align:center; margin: 24px 0;">
+      <img src="{{ url_for('mystery_image_asset') }}" alt="mystery.jpg"
+           style="max-width:100%; border-radius:10px; border:1px solid var(--border-color);">
+      <div style="margin-top:10px;">
+        <a href="{{ url_for('mystery_image_asset') }}" download class="btn-sm">Download mystery.jpg</a>
+        <a href="{{ url_for('mystery_metadata_asset') }}" download class="btn-sm">Download metadata.txt</a>
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="hint-box">
+      <strong>Hint</strong>
+      <button id="hint-btn" class="btn-sm" style="margin-left:10px;">Show Hint</button>
+      <div class="hint-content" id="hint-content">{{ meta.hint }}</div>
+    </div>
+
+    {% if event.ended %}
+      <p style="color:var(--accent-red); font-family:var(--font-mono); margin-top:20px;">
+        CTF ENDED — flag submissions are closed.
+      </p>
+    {% elif solved %}
+      <div class="flag-msg correct">You already solved this challenge — nice work!</div>
+    {% else %}
+      <form id="flag-form" class="flag-form" data-challenge-code="{{ challenge.code }}">
+        <input type="text" id="flag-input" class="flag-input" placeholder="CTF{...}" autocomplete="off">
+        <button type="submit" class="btn btn-primary">Submit Flag</button>
+      </form>
+      <div class="flag-msg" id="flag-msg"></div>
+    {% endif %}
+
+    <a href="{{ url_for('challenges_list') }}" class="back-link">&larr; Back to Challenges</a>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  CTFApp.wireHintButton();
+  CTFApp.wireFlagForm();
+</script>
+{% endblock %}

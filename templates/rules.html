@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Rules — CyberQuest CTF{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="page-header">
+    <h1>&gt; Rules</h1>
+    <p>Please read before you start hacking (ethically!).</p>
+  </div>
+
+  <ul class="rules-list">
+    <li><span class="num">01</span> Do not attack systems outside the CTF.</li>
+    <li><span class="num">02</span> Only use the provided challenges.</li>
+    <li><span class="num">03</span> Do not share flags with other teams.</li>
+    <li><span class="num">04</span> Ask organizers if you are stuck.</li>
+    <li><span class="num">05</span> Have fun and learn cybersecurity.</li>
+  </ul>
+
+  <div style="text-align:center; margin-top: 40px;">
+    <a href="{{ url_for('challenges_list') if session.get('team_id') else url_for('register') }}" class="btn btn-primary">
+      {{ 'Start Solving' if session.get('team_id') else 'Register to Start' }}
+    </a>
+  </div>
+</div>
+{% endblock %}

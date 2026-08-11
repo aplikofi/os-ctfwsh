@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Register — CyberQuest CTF{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="page-header">
+    <h1>&gt; Team Registration</h1>
+    <p>Create your team account to start solving challenges.</p>
+  </div>
+
+  <div class="challenge-detail" style="max-width:480px;">
+    <form method="POST" action="{{ url_for('register') }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+      <label for="team_name" style="display:block; margin-bottom:6px; color:var(--text-dim); font-size:0.85rem;">Team Name</label>
+      <input type="text" id="team_name" name="team_name" class="flag-input" style="width:100%; margin-bottom:16px;"
+             value="{{ team_name or '' }}" required maxlength="40" autocomplete="off">
+
+      <label for="email" style="display:block; margin-bottom:6px; color:var(--text-dim); font-size:0.85rem;">Email Address</label>
+      <input type="email" id="email" name="email" class="flag-input" style="width:100%; margin-bottom:16px;"
+             value="{{ email or '' }}" required maxlength="254" autocomplete="off">
+
+      <label for="password" style="display:block; margin-bottom:6px; color:var(--text-dim); font-size:0.85rem;">Password</label>
+      <input type="password" id="password" name="password" class="flag-input" style="width:100%; margin-bottom:16px;"
+             required minlength="8" autocomplete="new-password">
+
+      <label for="confirm_password" style="display:block; margin-bottom:6px; color:var(--text-dim); font-size:0.85rem;">Confirm Password</label>
+      <input type="password" id="confirm_password" name="confirm_password" class="flag-input" style="width:100%; margin-bottom:24px;"
+             required minlength="8" autocomplete="new-password">
+
+      <button type="submit" class="btn btn-primary" style="width:100%;">Create Team</button>
+    </form>
+
+    <p style="margin-top:20px; color:var(--text-dim); font-size:0.9rem; text-align:center;">
+      Already have a team? <a href="{{ url_for('login') }}">Log in</a>
+    </p>
+  </div>
+</div>
+{% endblock %}

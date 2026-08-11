@@ -1,0 +1,4 @@
+# CyberQuest CTF - robots.txt
+# This file is a classic place attackers (and CTF players!) check first.
+User-agent: *
+Disallow: /secret/

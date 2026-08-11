@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}CyberQuest CTF — Home{% endblock %}
+{% block content %}
+
+  <section class="hero">
+    <span class="badge">// COLLEGE TECH EVENT 2026</span>
+    <h1>Cyber<span>Quest</span> CTF</h1>
+    <p class="subtitle">Beginner Cybersecurity Challenge</p>
+    <p class="desc">
+      Sharpen your hacker instincts! CyberQuest CTF is a beginner-friendly
+      Capture The Flag event where you'll practice real-world security
+      concepts — reading source code, decoding data, inspecting cookies,
+      finding hidden files, and digging through metadata. No prior
+      experience required — just curiosity and a browser's dev tools.
+    </p>
+
+    <div class="hero-buttons">
+      {% if session.get('team_id') %}
+        <a href="{{ url_for('challenges_list') }}" class="btn btn-primary">Start CTF</a>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">My Dashboard</a>
+      {% else %}
+        <a href="{{ url_for('register') }}" class="btn btn-primary">Start CTF</a>
+        <a href="{{ url_for('login') }}" class="btn btn-secondary">Team Login</a>
+      {% endif %}
+    </div>
+
+    <div class="countdown">
+      <div class="label">{{ 'CTF ENDED' if event.ended else 'Event Ends In' }}</div>
+      <div class="countdown-timer" id="countdown">--:--:--</div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="value">{{ current_team_name or "Guest" }}</div>
+        <div class="label">Player</div>
+      </div>
+      <div class="stat-card">
+        <div class="value">{{ team_score if team_score is not none else "—" }}</div>
+        <div class="label">Your Score</div>
+      </div>
+      <div class="stat-card">
+        <div class="value">{{ solved_count if solved_count is not none else "—" }}</div>
+        <div class="label">Solved</div>
+      </div>
+      <div class="stat-card">
+        <div class="value">{{ total_challenges }}</div>
+        <div class="label">Total Challenges</div>
+      </div>
+    </div>
+
+    <div class="terminal">
+      <div class="type-line">$ whoami<br>&gt; guest@ctf-demo<br>$ ./start_quest.sh --category=all</div>
+    </div>
+  </section>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  window.CTF_EVENT_REMAINING = {{ event.remaining_seconds }};
+  window.CTF_EVENT_ENDED = {{ 'true' if event.ended else 'false' }};
+  document.addEventListener("DOMContentLoaded", () => CTFApp.startCountdown("countdown"));
+</script>
+{% endblock %}

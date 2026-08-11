@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Scoreboard — CyberQuest CTF{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="page-header">
+    <h1>&gt; Scoreboard</h1>
+    <p>Live standings — updates automatically.</p>
+    {% if event.ended %}
+      <p style="color:var(--accent-red); font-family:var(--font-mono); margin-top:10px;">CTF ENDED</p>
+    {% endif %}
+  </div>
+
+  <table class="scoreboard-table">
+    <thead>
+      <tr>
+        <th>Rank</th>
+        <th>Team</th>
+        <th>Score</th>
+        <th>Solved</th>
+      </tr>
+    </thead>
+    <tbody id="scoreboard-body">
+      <tr><td colspan="4" style="text-align:center; color:var(--text-dim);">Loading…</td></tr>
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.addEventListener("DOMContentLoaded", () => CTFApp.startScoreboardPolling("scoreboard-body"));
+</script>
+{% endblock %}

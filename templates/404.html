@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}404 — CyberQuest CTF{% endblock %}
+{% block content %}
+<div class="container" style="text-align:center;">
+  <div class="page-header">
+    <h1>&gt; 404_not_found</h1>
+    <p>That page doesn't exist. Maybe it's hidden somewhere else...</p>
+  </div>
+  <a href="{{ url_for('index') }}" class="btn btn-primary">Back to Home</a>
+</div>
+{% endblock %}

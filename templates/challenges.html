@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Challenges — CyberQuest CTF{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="page-header">
+    <h1>&gt; Challenges</h1>
+    <p>Five beginner challenges. Solve them to earn points and climb the scoreboard.</p>
+    {% if event.ended %}
+      <p style="color:var(--accent-red); font-family:var(--font-mono); margin-top:10px;">CTF ENDED — flag submissions are closed, but you can keep exploring.</p>
+    {% endif %}
+  </div>
+
+  <div class="challenge-grid">
+    {% for c in challenges %}
+    <div class="challenge-card {{ 'solved' if c.solved }}">
+      <div class="card-top">
+        <div class="badge-row">
+          <span class="badge badge-{{ c.category_key }}">{{ c.category }}</span>
+          <span class="badge badge-easy">{{ c.difficulty }}</span>
+        </div>
+        <span class="points-tag">{{ c.points }} pts</span>
+      </div>
+      <h3>{{ c.title }}</h3>
+      {% if c.solved %}
+      <div class="solved-tag">✔ Solved</div><br>
+      {% endif %}
+      <a href="{{ url_for('challenge_detail', code=c.code) }}" class="btn-sm">{{ 'Review Challenge' if c.solved else 'Open Challenge' }}</a>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

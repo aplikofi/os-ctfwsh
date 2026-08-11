@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Login — CyberQuest CTF{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="page-header">
+    <h1>&gt; Team Login</h1>
+    <p>Log in to access the challenges.</p>
+  </div>
+
+  <div class="challenge-detail" style="max-width:420px;">
+    <form method="POST" action="{{ url_for('login') }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      {% if next %}
+        <input type="hidden" name="next" value="{{ next }}">
+      {% endif %}
+
+      <label for="email" style="display:block; margin-bottom:6px; color:var(--text-dim); font-size:0.85rem;">Email Address</label>
+      <input type="email" id="email" name="email" class="flag-input" style="width:100%; margin-bottom:16px;"
+             value="{{ email or '' }}" required autocomplete="off">
+
+      <label for="password" style="display:block; margin-bottom:6px; color:var(--text-dim); font-size:0.85rem;">Password</label>
+      <input type="password" id="password" name="password" class="flag-input" style="width:100%; margin-bottom:24px;"
+             required autocomplete="current-password">
+
+      <button type="submit" class="btn btn-primary" style="width:100%;">Login</button>
+    </form>
+
+    <p style="margin-top:20px; color:var(--text-dim); font-size:0.9rem; text-align:center;">
+      No team yet? <a href="{{ url_for('register') }}">Register here</a>
+    </p>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Admin Login — CyberQuest CTF{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="page-header">
+    <h1>&gt; Organizer Login</h1>
+    <p>Restricted access for event organizers.</p>
+  </div>
+
+  <div class="challenge-detail" style="max-width:420px;">
+    <form method="POST" action="{{ url_for('admin_login') }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+      <label for="username" style="display:block; margin-bottom:6px; color:var(--text-dim); font-size:0.85rem;">Admin Username</label>
+      <input type="text" id="username" name="username" class="flag-input" style="width:100%; margin-bottom:16px;"
+             required autocomplete="off">
+
+      <label for="password" style="display:block; margin-bottom:6px; color:var(--text-dim); font-size:0.85rem;">Password</label>
+      <input type="password" id="password" name="password" class="flag-input" style="width:100%; margin-bottom:24px;"
+             required autocomplete="current-password">
+
+      <button type="submit" class="btn btn-primary" style="width:100%;">Login</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
